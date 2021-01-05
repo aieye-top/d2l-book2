@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-from d2lbook import __version__
+from d2lbook2 import __version__
 
 requirements = [
     'jupyter',
