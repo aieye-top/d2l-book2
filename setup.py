@@ -34,7 +34,7 @@ setup(
     package_data={'d2lbook2':['config_default.ini', 'upload_doc_s3.sh', 'upload_github.sh']},
     entry_points={
         'console_scripts': [
-            'd2lbook = d2lbook.main:main',
+            'd2lbook2 = d2lbook2.main:main',
         ]
     },
 )
