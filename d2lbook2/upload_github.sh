@@ -21,20 +21,20 @@ git clone git@github.com:${REPO}.git ${REPO_DIR}
 # remove all except for README.md and .git.
 tmp=$(mktemp -d)
 
-if [[ -f "${REPO_DIR}/README.md" ]]; then
-    mv ${REPO_DIR}/README.md $tmp/
+if [[ -f "${REPO_DIR}/docs/README.md" ]]; then
+    mv ${REPO_DIR}/docs/README.md $tmp/
 fi
 mv ${REPO_DIR}/.git $tmp/
 rm -rf ${REPO_DIR}/*
 if [[ -f "$tmp/README.md" ]]; then
     mv $tmp/README.md ${REPO_DIR}/
 fi
-mv $tmp/.git ${REPO_DIR}/.git
+mv $tmp/.git ${REPO_DIR}.git/docs/
 
-cp -r ${IN_DIR}/* ${REPO_DIR}/
+cp -r ${IN_DIR}/* ${REPO_DIR}/docs/
 
-if [ -f ${REPO_DIR}/index.html ]; then
-    touch ${REPO_DIR}/.nojekyll
+if [ -f ${REPO_DIR}/docs/index.html ]; then
+    touch ${REPO_DIR}/docs/.nojekyll
 fi
 
 cd ${REPO_DIR}
