@@ -9,7 +9,7 @@ import pathlib
 
 def _write_header(f):
     f.write('# This file is generated automatically through:\n')
-    f.write('#    d2lbook build lib\n')
+    f.write('#    d2lbook2 build lib\n')
     f.write('# Don\'t edit it directly\n\n')
 
 def save_file(root_dir: str, nbfile: str):
@@ -35,7 +35,7 @@ def save_file(root_dir: str, nbfile: str):
     if saved:
         with pyfile.open('w') as f:
             f.write(f'# This file is generated from {str(nbfile)} automatically through:\n')
-            f.write('#    d2lbook build lib\n')
+            f.write('#    d2lbook2 build lib\n')
             f.write('# Don\'t edit it directly\n\n')
             for blk in saved:
                 f.write(blk+'\n\n')

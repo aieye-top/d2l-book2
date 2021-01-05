@@ -1,4 +1,4 @@
-from d2lbook import markdown, common
+from d2lbook2 import markdown, common
 import unittest
 
 _markdown_src = r'''# Test

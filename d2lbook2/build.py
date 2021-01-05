@@ -43,7 +43,7 @@ def _once(func):
             name += '_' + self.config.tab
         if name in self.done and self.done[name]:
             return
-        full_name = 'd2lbook build ' + name
+        full_name = 'd2lbook2 build ' + name
         tik = datetime.datetime.now()
         func(self)
         logging.info('=== Finished "%s" in %s', full_name,
