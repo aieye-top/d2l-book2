@@ -1,6 +1,6 @@
-from d2lbook import notebook
-from d2lbook import build
-from d2lbook import common
+from d2lbook2 import notebook
+from d2lbook2 import build
+from d2lbook2 import common
 import unittest
 import nbconvert
 
@@ -12,7 +12,7 @@ import nbconvert
 # 4: markdown python3
 # 5: code default
 # 6: code python2
-# 7: markdown 
+# 7: markdown
 _markdown_src = r'''# Test
 
 first para
@@ -129,7 +129,7 @@ class TestNotebook(unittest.TestCase):
         self.assertEqual(len(cells), 3)
         self.assertEqual(cells[1].metadata['tab'], ['python3'])
 
-    def _split_and_merge(self, nb, tabs):        
+    def _split_and_merge(self, nb, tabs):
         split_nb = [notebook.get_tab_notebook(nb, tab, tabs[0]) for tab in tabs]
         merged_nb = notebook.merge_tab_notebooks(split_nb)
         return split_nb, merged_nb
@@ -155,8 +155,8 @@ class TestNotebook(unittest.TestCase):
         self.assertRegex(cells[8].source, 'mdl-tabs__panel.*python3')
         self.assertRegex(cells[12].source, 'mdl-tabs__panel.*python2')
 
-        nb = notebook.split_markdown_cell(notebook.read_markdown(_all_tab_cell))        
-        _, new_nb = self._split_and_merge(nb, ['python3', 'python2', 'python4']) 
+        nb = notebook.split_markdown_cell(notebook.read_markdown(_all_tab_cell))
+        _, new_nb = self._split_and_merge(nb, ['python3', 'python2', 'python4'])
         cells = new_nb.cells
         self.assertEqual(len(cells), 5)
         self.assertEqual(cells[4].metadata['tab'], ['python3', 'python2'])
@@ -168,7 +168,7 @@ class TestNotebook(unittest.TestCase):
         self.assertRegex(cells[4].source, 'mdl-tabs__panel.*python3')
         self.assertRegex(cells[7].source, 'mdl-tabs__panel.*python2')
         self.assertRegex(cells[11].source, 'mdl-tabs__panel.*python4')
-        
+
 
 if __name__ == '__main__':
     unittest.main()

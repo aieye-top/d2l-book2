@@ -8,8 +8,8 @@ import notedown
 import nbformat
 import nbconvert
 from nbformat import notebooknode
-from d2lbook import markdown
-from d2lbook import common
+from d2lbook2 import markdown
+from d2lbook2 import common
 
 
 def create_new_notebook(nb: notebooknode.NotebookNode,

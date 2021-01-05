@@ -1,5 +1,5 @@
 import argparse
-from d2lbook import markdown, common, config
+from d2lbook2 import markdown, common, config
 import glob
 import re
 import sys

@@ -2,7 +2,7 @@ import argparse
 import glob
 import sys
 import os
-from d2lbook import config, markdown, utils, common
+from d2lbook2 import config, markdown, utils, common
 import logging
 import re
 import glob

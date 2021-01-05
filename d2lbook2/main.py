@@ -1,10 +1,10 @@
 import argparse
 import sys
-from d2lbook.build import build
-from d2lbook.deploy import deploy
-from d2lbook.clear import clear
-from d2lbook.activate import activate
-from d2lbook.translate import translate
+from d2lbook2.build import build
+from d2lbook2.deploy import deploy
+from d2lbook2.clear import clear
+from d2lbook2.activate import activate
+from d2lbook2.translate import translate
 import logging
 
 logging.basicConfig(format='[d2lbook:%(filename)s:L%(lineno)d] %(levelname)-6s %(message)s')

@@ -11,14 +11,14 @@ import regex
 import subprocess
 import hashlib
 import pathlib
-from d2lbook.utils import *  # TODO(mli), don't report *
-from d2lbook.sphinx import prepare_sphinx_env
-from d2lbook.config import Config
-from d2lbook import colab, sagemaker
-from d2lbook import markdown
-from d2lbook import library
-from d2lbook import notebook
-from d2lbook import rst as rst_lib
+from d2lbook2.utils import *  # TODO(mli), don't report *
+from d2lbook2.sphinx import prepare_sphinx_env
+from d2lbook2.config import Config
+from d2lbook2 import colab, sagemaker
+from d2lbook2 import markdown
+from d2lbook2 import library
+from d2lbook2 import notebook
+from d2lbook2 import rst as rst_lib
 
 __all__  = ['build']
 

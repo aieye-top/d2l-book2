@@ -1,8 +1,8 @@
 """Integration with Sagemaker"""
 import nbformat
-from d2lbook import utils
-from d2lbook import colab
-from d2lbook import notebook
+from d2lbook2 import utils
+from d2lbook2 import colab
+from d2lbook2 import notebook
 
 class Sagemaker(colab.Colab):
     def __init__(self, config):

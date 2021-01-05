@@ -1,6 +1,6 @@
 """Save codes into library"""
 from typing import List
-from d2lbook import notebook
+from d2lbook2 import notebook
 import logging
 import os
 import copy

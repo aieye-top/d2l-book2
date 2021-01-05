@@ -1,7 +1,7 @@
 """utilities to handle markdown
 """
 import re
-from d2lbook import common
+from d2lbook2 import common
 from typing import List, Dict
 import logging
 

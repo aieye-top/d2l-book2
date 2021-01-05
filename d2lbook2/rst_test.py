@@ -1,5 +1,5 @@
-from d2lbook import notebook
-from d2lbook import rst
+from d2lbook2 import notebook
+from d2lbook2 import rst
 import unittest
 import nbconvert
 

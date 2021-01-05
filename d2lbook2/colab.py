@@ -3,8 +3,8 @@ import os
 import re
 import nbformat
 import logging
-from d2lbook import notebook
-from d2lbook import utils
+from d2lbook2 import notebook
+from d2lbook2 import utils
 
 def parse_repo_lib(repo_str, lib_str, version):
     repo = utils.split_config_str(repo_str)

@@ -1,7 +1,7 @@
 import os
 import logging
-from d2lbook import sphinx_template as template
-from d2lbook import utils
+from d2lbook2 import sphinx_template as template
+from d2lbook2 import utils
 
 __all__ = ['prepare_sphinx_env']
 

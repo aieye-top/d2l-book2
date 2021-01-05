@@ -3,10 +3,10 @@ import sys
 import logging
 import argparse
 import shutil
-from d2lbook.utils import *
-from d2lbook.config import Config
-from d2lbook import colab
-from d2lbook import sagemaker
+from d2lbook2.utils import *
+from d2lbook2.config import Config
+from d2lbook2 import colab
+from d2lbook2 import sagemaker
 
 __all__  = ['deploy']
 

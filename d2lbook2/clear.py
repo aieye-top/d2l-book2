@@ -1,6 +1,6 @@
 import logging
 import shutil
-from d2lbook.config import Config
+from d2lbook2.config import Config
 
 __all__  = ['clear']
 
