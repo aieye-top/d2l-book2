@@ -24,8 +24,8 @@ tmp=$(mktemp -d)
 if [[ -f "${REPO_DIR}/docs/README.md" ]]; then
     mv ${REPO_DIR}/docs/README.md $tmp/
 fi
-mv ${REPO_DIR}/.git $tmp/
-rm -rf ${REPO_DIR}/*
+mv ${REPO_DIR}/docs/.git $tmp/
+rm -rf ${REPO_DIR}/docs/*
 if [[ -f "$tmp/README.md" ]]; then
     mv $tmp/README.md ${REPO_DIR}/
 fi
@@ -37,7 +37,7 @@ if [ -f ${REPO_DIR}/docs/index.html ]; then
     touch ${REPO_DIR}/docs/.nojekyll
 fi
 
-cd ${REPO_DIR}
+cd ${REPO_DIR}/docs/
 git config --global push.default simple
 git add -f --all .
 git diff-index --quiet HEAD || git commit -am "Version $3"
