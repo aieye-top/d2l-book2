@@ -31,7 +31,7 @@ if [[ -f "$tmp/README.md" ]]; then
 fi
 mv $tmp/.git ${REPO_DIR}/.git
 
-cd {REPO_DIR}
+cd ${REPO_DIR}
 docs=$(mkdir docs -p)
 
 cd ..
@@ -43,7 +43,7 @@ if [ -f ${REPO_DIR}/$docs/index.html ]; then
     touch ${REPO_DIR}/$docs/.nojekyll
 fi
 
-cd {REPO_DIR}
+cd ${REPO_DIR}
 
 git config --global push.default simple
 git add -f --all .
