@@ -43,7 +43,6 @@ if [ -f ${REPO_DIR}/$docs/index.html ]; then
     touch ${REPO_DIR}/$docs/.nojekyll
 fi
 
-# Exit to gitup
 cd {REPO_DIR}
 
 git config --global push.default simple
