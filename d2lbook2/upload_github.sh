@@ -45,7 +45,7 @@ fi
 
 cd ..
 
-cp -r _build/${REPO_DIR}/* .
+cp -r _build/github_deploy-git/* .
 
 git config --global push.default simple
 git add -f --all .
