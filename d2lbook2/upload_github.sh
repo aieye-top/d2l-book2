@@ -31,13 +31,21 @@ if [[ -f "$tmp/README.md" ]]; then
 fi
 mv $tmp/.git ${REPO_DIR}/.git
 
-cp -r ${IN_DIR}/* ${REPO_DIR}/
+cd {REPO_DIR}
+docs=$(mkdir docs -p)
 
-if [ -f ${REPO_DIR}/index.html ]; then
-    touch ${REPO_DIR}/.nojekyll
+cd..
+
+cp -r ${IN_DIR}/* ${REPO_DIR}/$docs/
+
+
+if [ -f ${REPO_DIR}/$docs/index.html ]; then
+    touch ${REPO_DIR}/$docs/.nojekyll
 fi
 
-cd ${REPO_DIR}
+# Exit to gitup
+cd {REPO_DIR}
+
 git config --global push.default simple
 git add -f --all .
 git diff-index --quiet HEAD || git commit -am "Version $3"
