@@ -34,7 +34,7 @@ mv $tmp/.git ${REPO_DIR}/.git
 cd {REPO_DIR}
 docs=$(mkdir docs -p)
 
-cd..
+cd ..
 
 cp -r ${IN_DIR}/* ${REPO_DIR}/$docs/
 
