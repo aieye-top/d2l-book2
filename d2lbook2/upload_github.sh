@@ -36,11 +36,11 @@ docs=$(mkdir docs -p)
 
 cd ..
 
-cp -r ${IN_DIR}/* ${REPO_DIR}/$docs/
+cp -r ${IN_DIR}/* ${REPO_DIR}/docs/
 
 
-if [ -f ${REPO_DIR}/$docs/index.html ]; then
-    touch ${REPO_DIR}/$docs/.nojekyll
+if [ -f ${REPO_DIR}/docs/index.html ]; then
+    touch ${REPO_DIR}/docs/.nojekyll
 fi
 
 cd ${REPO_DIR}
