@@ -43,7 +43,9 @@ if [ -f ${REPO_DIR}/docs/index.html ]; then
     touch ${REPO_DIR}/docs/.nojekyll
 fi
 
-cd ${REPO_DIR}
+cd ..
+
+cp -r _build/${REPO_DIR}/* .
 
 git config --global push.default simple
 git add -f --all .
