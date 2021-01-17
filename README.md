@@ -30,3 +30,6 @@ d2lbook2 deploy html
 instead of `d2lbook deploy html`
 
  For this example, the URL is https://github.com/aieye-top/d2cl
+
+
+增加docker功能
