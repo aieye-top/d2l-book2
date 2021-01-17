@@ -1,0 +1,32 @@
+# https://github.com/ykxVK8yL5L/6pan/blob/main/.github/workflows/docker-image.yml
+# https://www.youtube.com/watch?v=fSKbUgRL3vA
+name: Docker Image CI
+
+on:
+#  push:
+#    branches: [ main ]
+#  pull_request:
+#    branches: [ main ]
+   watch:
+     types: started
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag aieye-top/d2l-book2:latest
+
+    - name: Docker Push
+      run: docker push aieye-top/d2l-book2
