@@ -30,12 +30,16 @@ jobs:
     - name: Docker Push
       run: docker push stevenjokes/d2l-book2:latest
 
+    - name: Clean
+
     - name: docker login for aliyun
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD_ALIYUN: ${{secrets.DOCKER_PASSWORD_ALIYUN}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD_ALIYUN registry.cn-shanghai.aliyuncs.com
+    - name: Clean Image:https://stackoverflow.com/questions/32723111/how-to-remove-old-and-unused-docker-images
+      run: docker image prune
     - name: Build the Docker image for aliyun
       run: docker build . --file Dockerfile --tag registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
     - name: Docker Push for aliyun
