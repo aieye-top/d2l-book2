@@ -4,6 +4,6 @@ RUN apt update && apt dist-upgrade -y && DEBIAN_FRONTEND=noninteractive apt inst
 
 RUN pip3 install git+https://github.com/aieye-top/d2l-book2/tree/master/d2lbook2
 
-WORKDIR /book
+WORKDIR /d2lbook2
 
 CMD ["d2lbook2", "--help"]
