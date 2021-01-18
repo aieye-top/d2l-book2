@@ -31,6 +31,8 @@ instead of `d2lbook deploy html`
 
  For this example, the URL is https://github.com/aieye-top/d2cl
 
+The result:
+https://aieye-top.github.io/d2cl/
 
 ## Docker
 
