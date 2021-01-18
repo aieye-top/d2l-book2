@@ -39,13 +39,39 @@ https://aieye-top.github.io/d2cl/
  https://github.com/ykxVK8yL5L/6pan/blob/main/.github/workflows/docker-image.yml
  https://www.youtube.com/watch?v=fSKbUgRL3vA
 
+### Not China:
 
 ```bash
 docker pull stevenjokes/d2l-book2:latest
 ```
 
-国内：
+```bash
+docker run stevenjokes/d2l-book2:latest build html
+```
+
+---
+
+### 国内：
 
 ```bash
 docker pull registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
+```
+
+#### 用例：
+
+(base) PS C:\Users\a8679> docker run registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
+usage: d2lbook2 [-h] {build,deploy,clear,activate,translate}
+
+D2L Book: Publish a book based on Jupyter notebooks. Run d2lbook2 command -h
+to get the help message for each command.
+
+positional arguments:
+  {build,deploy,clear,activate,translate}
+
+optional arguments:
+  -h, --help            show this help message and exit
+
+
+```bash
+docker run registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest build html
 ```
