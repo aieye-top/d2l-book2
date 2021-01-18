@@ -28,4 +28,4 @@ jobs:
       run: docker build . --file Dockerfile --tag aieye-top/d2l-book2:latest
 
     - name: Docker Push
-      run: docker push stevenjokes/d2l-book2
+      run: docker push aieye-top/d2l-book2
