@@ -33,3 +33,6 @@ instead of `d2lbook deploy html`
 
 
 增加docker功能
+
+ https://github.com/ykxVK8yL5L/6pan/blob/main/.github/workflows/docker-image.yml
+ https://www.youtube.com/watch?v=fSKbUgRL3vA
