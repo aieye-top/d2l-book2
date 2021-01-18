@@ -2,11 +2,12 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-  watch:
-    types: started
+    branches:
+      - master
+  # pull_request:
+  #   branches: [ master ]
+  # watch:
+  #   types: started
 
 jobs:
 
