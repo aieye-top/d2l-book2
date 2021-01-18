@@ -45,5 +45,5 @@ docker pull stevenjokes/d2l-book2:latest
 国内：
 
 ```bash
-docker push registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
+docker pull registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
 ```
