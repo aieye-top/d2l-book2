@@ -33,7 +33,7 @@ jobs:
     - name: docker login for aliyun
       env:
         DOCKER_USER: ${{secrets.DOCKER_USER}}
-        DOCKER_PASSWORD: ${{secrets.$DOCKER_PASSWORD_ALIYUN}}
+        DOCKER_PASSWORD_ALIYUN: ${{secrets.$DOCKER_PASSWORD_ALIYUN}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD_ALIYUN registry.cn-shanghai.aliyuncs.com
     - name: Build the Docker image for aliyun
