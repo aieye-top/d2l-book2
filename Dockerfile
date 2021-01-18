@@ -7,4 +7,4 @@ RUN python3 -m pip install -U git+https://github.com/aieye-top/d2l-book2#egg=d2l
 
 WORKDIR /d2lbook2
 
-CMD ["d2lbook2", "--help"]
+CMD ["d2lbook2", "deploy","html"]

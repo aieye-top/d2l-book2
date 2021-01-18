@@ -72,6 +72,28 @@ optional arguments:
   -h, --help            show this help message and exit
 
 
+
 ```bash
-docker run registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest build html
+docker run -dit -v D:/onedrive/Documents/read/d2cl-whole/d2cl/d2cl:/share registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest /bin/bash
 ```
+
+--rm:在容器终止运行后自动删除容器文件
+-d: 后台运行容器，并返回容器ID；
+-i: 以交互模式运行容器，通常与 -t 同时使用；
+-t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用；
+-v: 把宿主机的/d/onedrive/Documents/read/d2cl-whole/d2cl/d2cl下载目录挂载到registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest容器的/share目录下。
+
+
+```bash
+docker ps
+docker exec -it <container_id> /bin/bash
+```
+
+把CONTAINER ID粘贴到<container_id>位置
+
+```bash
+cd ..
+ls
+d2lbook2 build html
+```
+
