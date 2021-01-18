@@ -37,7 +37,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD_ALIYUN registry.cn-shanghai.aliyuncs.com
     - name: Clean Image
-      run: docker image prune
+      run: docker image prune -y
     - name: Build the Docker image for aliyun
       run: docker build . --file Dockerfile --tag registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
     - name: Docker Push for aliyun
