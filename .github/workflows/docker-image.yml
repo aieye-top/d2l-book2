@@ -29,3 +29,14 @@ jobs:
 
     - name: Docker Push
       run: docker push stevenjokes/d2l-book2:latest
+
+    - name: docker login for aliyun
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USER}}
+        DOCKER_PASSWORD: ${{secrets.$DOCKER_PASSWORD_ALIYUN}}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD_ALIYUN registry.cn-shanghai.aliyuncs.com
+    - name: Build the Docker image for aliyun
+      run: docker build . --file Dockerfile --tag registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
+    - name: Docker Push for aliyun
+      run: docker push registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest

@@ -32,7 +32,16 @@ instead of `d2lbook deploy html`
  For this example, the URL is https://github.com/aieye-top/d2cl
 
 
-增加docker功能
+## Docker
 
  https://github.com/ykxVK8yL5L/6pan/blob/main/.github/workflows/docker-image.yml
  https://www.youtube.com/watch?v=fSKbUgRL3vA
+
+
+```bash
+docker pull stevenjokes/d2l-book2:latest
+```
+
+国内：
+
+
