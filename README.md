@@ -12,7 +12,7 @@ https://github.com/d2l-ai/d2l-book/commit/5f078f8812bb0f2bf45d9648fa80e1ba63f7b5
 Install:
 
 ```bash
-pip install git+https://github.com/aieye-top/d2l-book2/tree/master/d2lbook2
+pip install git+https://github.com/aieye-top/d2l-book2/
 ```
 
 https://book.d2l.ai/user/deploy.html
