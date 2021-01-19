@@ -4,7 +4,7 @@ RUN apt update && apt dist-upgrade -y && DEBIAN_FRONTEND=noninteractive apt inst
 
 RUN python3 -m pip install --upgrade pip
 RUN python3 -m pip install -U git+https://github.com/aieye-top/d2l-book2#egg=d2lbook2
-RUN python3 -m pip install pytorch torchvision
+RUN python3 -m pip install --upgrade -r requirements.txt
 
 WORKDIR /d2lbook2
 
