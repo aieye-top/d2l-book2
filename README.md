@@ -74,7 +74,7 @@ optional arguments:
 
 
 ```bash
-docker run --rm --name d2cl-whole -dit -v /d/onedrive/Documents/read/d2cl-whole:/d2lbook2/d2cl-whole registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest  /bin/bash
+docker run --rm --name d2cl-whole -ditv d/onedrive/Documents/read/d2cl-whole:/d2lbook2/ registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest  /bin/bash
 ```
 
 --rm: 在容器终止运行后自动删除容器文件
@@ -82,24 +82,20 @@ docker run --rm --name d2cl-whole -dit -v /d/onedrive/Documents/read/d2cl-whole:
 -d: 后台运行容器，并返回容器ID；
 -i: 以交互模式运行容器，通常与 -t 同时使用；
 -t: 为容器重新分配一个伪输入终端，通常与 -i 同时使用；
--v: 把Win10宿主机的/d/onedrive/Documents/read/d2cl-whole/d2cl/d2cl下载目录挂载到registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest容器的/d2lbook2目录下。
+-v: 把Win10宿主机的/d/onedrive/Documents/read/d2cl-whole/下载目录挂载到registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest容器的/d2lbook2目录下。
 
-把CONTAINER ID粘贴到<container_id>位置
 
 ```bash
-docker ps
+docker cp "D:/onedrive/Documents/read/d2cl-whole" d2cl-whole:/d2lbook2/d2cl-whole
 docker exec -it d2cl-whole /bin/bash
 ```
 
+还是没搞懂挂载为啥只有目录没有文件？求大佬解答，只能cp下维持下生活。。
 
-```bash
-ls
-```
+
 
 应该能看到d2cl-whole
 
 ```bash
-d2lbook2 build html
+d2lbook2 build html;d2lbook2 deploy html
 ```
-
-[d2lbook2:config.py:L63] CRITICAL Failed to find the index file: ./index.md
