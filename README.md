@@ -1,15 +1,18 @@
 # D2L-Book2: A Toolkit for Hands-on Books
 
 This package helps you build and publish **a book with Python code**, or
-**Python package documents with tutorials**. The document site is available at
-docs/
+**Python package documents with tutorials**.
+
+The difference is
+
+* the document is available at docs/
+* you can upload by any systems with docker.
 
 TODO: https://github.com/d2l-ai/d2l-book/commit/5f078f8812bb0f2bf45d9648fa80e1ba63f7b524
 https://github.com/d2l-ai/d2l-book/commit/5f078f8812bb0f2bf45d9648fa80e1ba63f7b524
 
 
-
-Install:
+## Install:
 
 ```bash
 pip install git+https://github.com/aieye-top/d2l-book2/
