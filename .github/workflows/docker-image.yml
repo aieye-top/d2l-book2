@@ -1,9 +1,9 @@
 name: Docker Image CI
 
 on:
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
   # pull_request:
   #   branches: [ master ]
   # watch:
