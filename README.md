@@ -129,3 +129,9 @@ docker cp "C:\Users\a8679\.ssh" d2cl-whole:/root/.ssh
 ```bash
 d2lbook2 deploy html
 ```
+
+要登录用户名密钥，缓存
+
+```bash
+git config --global credential.helper cache
+```
