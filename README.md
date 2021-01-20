@@ -7,6 +7,7 @@ The difference is
 
 * the document is available at docs/
 * you can upload by any systems with docker.
+* the docker is automatedly upload by gitflows.(now # push)
 
 TODO: https://github.com/d2l-ai/d2l-book/commit/5f078f8812bb0f2bf45d9648fa80e1ba63f7b524
 https://github.com/d2l-ai/d2l-book/commit/5f078f8812bb0f2bf45d9648fa80e1ba63f7b524
