@@ -107,7 +107,7 @@ ls
 应该能看到d2cl-whole
 
 ```bash
-cd d2cl-whole/d2cl
+cd "/d2lbook2/d2cl-whole/d2cl"
 d2lbook2 build html;d2lbook2 deploy html
 ```
 
@@ -121,14 +121,31 @@ ssh -T git@github.com
 
 在deploy之前给ssh
 
+在容器里：
 
 ```bash
-docker cp "C:\Users\a8679\.ssh" d2cl-whole:/root/.ssh
+mkdir "/root/.ssh/"
+```
+
+```bash
+docker cp "C:\Users\a8679\.ssh\id_rsa.pub" d2cl-whole:/root/.ssh/id_rsa.pub
+docker cp "C:\Users\a8679\.ssh\id_rsa" d2cl-whole:/root/.ssh/id_rsa
+
+```
+
+在容器里：
+Keys need to be only readable by you:
+
+```bash
+chmod 400 ~/.ssh/id_rsa
 ```
 
 ![1](img/docker_git1.png)
 ![2](img/docker_git2.png)
 ![3](img/docker_git3.png)
+
+![whole](img/whole.png)
+![whole2](img/whole2.png)
 
 ```bash
 d2lbook2 deploy html
@@ -136,6 +153,27 @@ d2lbook2 deploy html
 
 要登录用户名密钥，缓存
 
+```
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+```
+
 ```bash
 git config --global credential.helper cache
 ```
+
+
+#进入容器后，就可以修改镜像了，比如修改镜像中已经部署的代码或者安装新的软件或包等，修改完成之后，exit 退出容器
+
+保存
+
+```bash
+docker commit -m "github" registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github
+```
+
+
+https://tianchi.aliyun.com/forum/postDetail?postId=88096
+
+https://zhuanlan.zhihu.com/p/57311853
+
+
