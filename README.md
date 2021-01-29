@@ -93,7 +93,6 @@ docker run --rm --name d2cl-whole -ditv /d/onedrive/Documents/read/d2cl-whole:/d
 
 
 ```bash
-docker cp "D:/onedrive/Documents/read/d2cl-whole" d2cl-whole:/d2lbook2/d2cl-whole
 docker exec -it d2cl-whole /bin/bash
 ```
 
