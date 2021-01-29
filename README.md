@@ -81,7 +81,7 @@ optional arguments:
 
 
 ```bash
-docker run --rm --name d2cl-whole -ditv /d/onedrive/Documents/read/d2cl-whole:/d2lbook2/ registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest  /bin/bash
+docker run --rm --name d2cl-whole -ditv /d/onedrive/Documents/read/d2cl-whole:/d2lbook2/d2cl-whole registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest  /bin/bash
 ```
 
 * --rm: 在容器终止运行后自动删除容器文件
@@ -98,7 +98,7 @@ docker exec -it d2cl-whole /bin/bash
 ```
 
 
-还是没搞懂，试了下挂载-v为啥只有目录没有文件？求大佬解答，只能cp下维持下生活。。
+后来用了for win，就解决了
 
 ```bash
 ls
@@ -168,8 +168,25 @@ git config --global credential.helper cache
 保存
 
 ```bash
-docker commit -m "github" registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github
+docker commit -m "github" d2cl-whole
 ```
+
+来将id为your-container-id的容器创建成一个镜像快照。
+
+接着，你通过docker images就可以查看到刚刚创建好的镜像快照了。
+
+通过docker tag命令，能够为未命名的镜像指定镜像名
+
+然后，通过：
+
+
+
+
+docker save -o [path-you-want-to-save/your-backup-name.tar]] [your-backup-name]
+
+把那个镜像打包成tar文件，保存到服务器上。 后面就可以把服务器上打包好的tar文件，下载到本地了。
+
+恢复： docker load -i your-backup-name.tar docker run -d -p 80:80 your-backup-name
 
 
 https://tianchi.aliyun.com/forum/postDetail?postId=88096
@@ -177,3 +194,4 @@ https://tianchi.aliyun.com/forum/postDetail?postId=88096
 https://zhuanlan.zhihu.com/p/57311853
 
 
+https://0x1c.dev/blog/dev/win10-docker-proxy/
