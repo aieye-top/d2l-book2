@@ -178,14 +178,21 @@ docker commit -m "github" d2cl-whole
 
 然后，通过：
 
+```bash
+docker tag f21d7e064f54 registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github
+```
 
-
+```bash
+docker run --rm --name d2cl-whole -ditv /d/onedrive/Documents/read/d2cl-whole:/d2lbook2/d2cl-whole registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
+```
 
 docker save -o [path-you-want-to-save/your-backup-name.tar]] [your-backup-name]
 
 把那个镜像打包成tar文件，保存到服务器上。 后面就可以把服务器上打包好的tar文件，下载到本地了。
 
 恢复： docker load -i your-backup-name.tar docker run -d -p 80:80 your-backup-name
+
+
 
 
 https://tianchi.aliyun.com/forum/postDetail?postId=88096
