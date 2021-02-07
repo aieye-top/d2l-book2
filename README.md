@@ -186,6 +186,53 @@ docker tag f21d7e064f54 registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:githu
 docker run --rm --name d2cl-whole -ditv /d/onedrive/Documents/read/d2cl-whole:/d2lbook2/d2cl-whole registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
 ```
 
+docker run --rm --name 2bPM --net host -ditv /d/onedrive/Documents/read/2bPM:/d2lbook2/2bPM registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
+
+
+https://docs.docker.com/docker-for-windows/#proxies
+
+docker run --rm --name 2bPM -e HTTP_PROXY=127.0.0.1:9090 -ditv /d/onedrive/Documents/read/2bPM:/d2lbook2/2bPM registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
+
+
+
+docker exec -it 2bPM /bin/bash
+
+https://github.com/yuanlam/Clash-Linux
+
+cd "d:\Downloads\Compressed"
+(base) PS D:\Downloads\Compressed> docker cp "clash-linux-amd64-v1.3.5.gz" 2bPM:/d2lbook2/clash.gz
+gzip -d clash.gz
+mv clash /usr/bin/clash
+
+---
+
+docker pull dreamacro/clash
+
+netstat -a
+
+docker run -d --name=clash -v "$PWD/config.yaml:/root/.config/clash/config.yaml" -p "127.0.0.1:1080:1080" -p "9090:9090" --restart=unless-stopped dreamacro/clash
+
+http://blog.joylau.cn/2020/05/02/Clash-Docker/
+https://www.mokeyjay.com/archives/2787
+
+---
+external-controller
+docker:
+127.0.0.1:9090
+
+http://www.yutiansut.com:3000/topic/5d91bc983c4c3273d88a1711
+
+---
+
+https://blog.csdn.net/qq_44695727/article/details/108830938?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522161262774016780271554375%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.%2522%257D&request_id=161262774016780271554375&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v29-2-108830938.first_rank_v2_pc_rank_v29&utm_term=Docker+for+Windows+%E4%BB%A3%E7%90%86&spm=1018.2226.3001.4187
+
+
+----\
+
+apt-get install iputils-ping
+
+apt-get install net-tools
+
 docker save -o [path-you-want-to-save/your-backup-name.tar]] [your-backup-name]
 
 把那个镜像打包成tar文件，保存到服务器上。 后面就可以把服务器上打包好的tar文件，下载到本地了。
@@ -194,6 +241,31 @@ docker save -o [path-you-want-to-save/your-backup-name.tar]] [your-backup-name]
 
 
 
+--net host
+
+---
+
+https://kebingzao.com/2019/02/22/docker-container-proxy/
+
+    "proxies":
+    {
+      "default":
+      {
+        "httpProxy": "http://127.0.0.1:9090",
+        "httpsProxy": "http://127.0.0.1:9090",
+        "ftpProxy":"127.0.0.1:9090",
+        "noProxy": "localhost"
+
+      }
+    },
+
+https://kebingzao.com/2019/02/22/docker-container-proxy/
+
+---
+
+https://www.coder.work/article/6293479
+https://stackoverflow.com/questions/46599381/docker-could-not-use-system-proxy
+---
 
 https://tianchi.aliyun.com/forum/postDetail?postId=88096
 
