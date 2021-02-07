@@ -186,27 +186,31 @@ docker tag f21d7e064f54 registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:githu
 docker run --rm --name d2cl-whole -ditv /d/onedrive/Documents/read/d2cl-whole:/d2lbook2/d2cl-whole registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
 ```
 
-docker run --rm --name 2bPM --net host -ditv /d/onedrive/Documents/read/2bPM:/d2lbook2/2bPM registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
+## PROXY
 
 
-https://docs.docker.com/docker-for-windows/#proxies
-
-
-
+```bash
 docker run --rm --name 2bPM -e HTTP_PROXY=127.0.0.1:1080 -ditv /d/onedrive/Documents/read/2bPM:/d2lbook2/2bPM registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
 docker exec -it 2bPM /bin/bash
+```
 
 ---
 
-# Not necessary:
+---
+
+### Not necessary:
 
 
+docker run --rm --name 2bPM --net host -ditv /d/onedrive/Documents/read/2bPM:/d2lbook2/2bPM registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
+
+https://docs.docker.com/docker-for-windows/#proxies
 https://github.com/yuanlam/Clash-Linux
 
 cd "d:\Downloads\Compressed"
 (base) PS D:\Downloads\Compressed> docker cp "clash-linux-amd64-v1.3.5.gz" 2bPM:/d2lbook2/clash.gz
 gzip -d clash.gz
 mv clash /usr/bin/clash
+
 
 ---
 
@@ -257,7 +261,6 @@ https://kebingzao.com/2019/02/22/docker-container-proxy/
       {
         "httpProxy": "http://127.0.0.1:9090",
         "httpsProxy": "http://127.0.0.1:9090",
-        "ftpProxy":"127.0.0.1:9090",
         "noProxy": "localhost"
 
       }
@@ -271,9 +274,26 @@ https://www.coder.work/article/6293479
 https://stackoverflow.com/questions/46599381/docker-could-not-use-system-proxy
 ---
 
+http://blog.joylau.cn/2020/05/02/Clash-Docker/
+
+
+
 https://tianchi.aliyun.com/forum/postDetail?postId=88096
 
 https://zhuanlan.zhihu.com/p/57311853
 
 
 https://0x1c.dev/blog/dev/win10-docker-proxy/
+
+
+---
+
+More:
+
+https://bibichuan.github.io/posts/b014f224.html
+
+http://reader.epubee.com/books/mobile/e1/e1bbb6f1b2ded87c818ea662b5014711/text00019.html
+
+Docker在windows上的基本命令使用:
+
+https://www.yuque.com/cdarling/hadoop/docker-windows-cmd?language=zh-cn
