@@ -16,7 +16,10 @@ REPO_DIR=${IN_DIR}-git
 
 # clone the repo, make sure GIT_USERNAME and GIT_PASSWORD have already set
 rm -rf ${REPO_DIR}
-git clone git@github.com:${REPO}.git ${REPO_DIR}
+# https:
+git clone https://github.com/${REPO}.git ${REPO_DIR}
+# OR ssh:
+# git clone git@github.com:${REPO}.git ${REPO_DIR}
 
 # remove all except for README.md and .git.
 tmp=$(mktemp -d)
