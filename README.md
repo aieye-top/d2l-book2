@@ -194,3 +194,7 @@ docker run --rm --name 2bPM -e HTTP_PROXY=127.0.0.1:1080 -ditv /d/onedrive/Docum
 docker exec -it 2bPM /bin/bash
 ```
 
+## Image
+
+需要手动复制到/_build/rst/下，以避免
+`WARNING: image file not readable`
