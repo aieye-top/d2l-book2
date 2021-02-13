@@ -49,6 +49,7 @@ fi
 cd ..
 
 cp -r _build/github_deploy-git/* .
+rm -rf ${REPO_DIR}
 
 git config --global push.default simple
 git add -f --all .
