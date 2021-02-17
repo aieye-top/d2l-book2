@@ -49,10 +49,6 @@ https://aieye-top.github.io/d2cl/
 docker pull stevenjokes/d2l-book2:latest
 ```
 
-```bash
-docker run stevenjokes/d2l-book2:latest build html
-```
-
 ---
 
 ### 国内：
@@ -63,6 +59,7 @@ docker pull registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
 
 ![pull]](img/docker_pull.png)
 
+---
 
 #### 用例：
 
