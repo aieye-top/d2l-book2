@@ -32,12 +32,12 @@ tmp=$(mktemp -d)
 if [[ -f "${REPO_DIR}/README.md" ]]; then
     mv ${REPO_DIR}/README.md $tmp/
 fi
-mv ${REPO_DIR}/.git $tmp/
+# mv ${REPO_DIR}/.git $tmp/
 rm -rf ${REPO_DIR}/*
 if [[ -f "$tmp/README.md" ]]; then
     mv $tmp/README.md ${REPO_DIR}/
 fi
-mv $tmp/.git ${REPO_DIR}/.git
+# mv $tmp/.git ${REPO_DIR}/.git
 
 cd ${REPO_DIR}
 docs=$(mkdir docs -p)
