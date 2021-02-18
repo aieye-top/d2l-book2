@@ -14,6 +14,7 @@ IN_DIR="$( cd $1 && pwd )"
 REPO=$2
 REPO_DIR=${IN_DIR}-git
 
+mkdir ${REPO_DIR}
 
 # disabled git clone
 
