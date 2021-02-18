@@ -14,11 +14,13 @@ IN_DIR="$( cd $1 && pwd )"
 REPO=$2
 REPO_DIR=${IN_DIR}-git
 
-# clone the repo, make sure GIT_USERNAME and GIT_PASSWORD have already set
-rm -rf ${REPO_DIR}
-
 mkdir ${REPO_DIR}
 # disabled git clone
+
+# clone the repo, make sure GIT_USERNAME and GIT_PASSWORD have already set
+# rm -rf ${REPO_DIR}
+
+
 # https:
 # git clone https://github.com/${REPO}.git ${REPO_DIR}
 # OR ssh:
