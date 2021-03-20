@@ -8,6 +8,31 @@ from nbformat import notebooknode
 from d2lbook2 import notebook
 from d2lbook2 import common
 from d2lbook2 import markdown
+import os
+import shutil
+
+def copy_dir(yuan,target):
+
+    '''将一个目录下的全部文件和目录,完整地<拷贝并覆盖>到另一个目录'''
+    # yuan 源目录
+    # target 目标目录
+
+    if not (os.path.isdir(yuan) and os.path.isdir(target)):
+        # 如果传进来的不是目录
+        # print("传入目录不存在")
+        return
+
+    for a in os.walk(yuan):
+        #递归创建目录
+        for d in a[1]:
+            dir_path = os.path.join(a[0].replace(yuan,target),d)
+            if not os.path.isdir(dir_path):
+                os.makedirs(dir_path)
+        #递归拷贝文件
+        for f in a[2]:
+            dep_path = os.path.join(a[0],f)
+            arr_path = os.path.join(a[0].replace(yuan,target),f)
+            shutil.copy(dep_path,arr_path)
 
 def convert_notebook(nb: notebooknode.NotebookNode, resources: Dict[str, str]):
     nb = _process_nb(nb)
@@ -111,6 +136,8 @@ def _process_rst(body):
                 j += 1
             i = j
         elif line.startswith('.. parsed-literal::'):
+            # if /img exists, copy it to _build/img
+            copy_dir('../../../img/', '../img/')
             # add a output class so we can add customized css
             lines[i] += '\n    :class: output'
             i += 1
