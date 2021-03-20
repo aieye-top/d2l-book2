@@ -11,6 +11,7 @@ from d2lbook2 import markdown
 import os
 import shutil
 
+# https://blog.csdn.net/qq_44107838/article/details/103139126
 def copy_dir(yuan,target):
 
     '''将一个目录下的全部文件和目录,完整地<拷贝并覆盖>到另一个目录'''
@@ -137,7 +138,8 @@ def _process_rst(body):
             i = j
         elif line.startswith('.. parsed-literal::'):
             # if /img exists, copy it to _build/img
-            copy_dir('../../../img/', '../img/')
+            cwd = os.getcwd() # https://blog.csdn.net/qq_17731383/article/details/81430425?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.baidujs&dist_request_id=&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.baidujs
+            copy_dir(cwd+'/_build/img/', cwd+'/img/')
             # add a output class so we can add customized css
             lines[i] += '\n    :class: output'
             i += 1
