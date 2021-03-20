@@ -138,26 +138,18 @@ def copy(src, tgt):
 # https://blog.csdn.net/qq_44107838/article/details/103139126
 def copy_dir(src,tgt):
 
-    '''将一个目录下的全部文件和目录,完整地<拷贝并覆盖>到另一个目录'''
-    # src 源目录
-    # tgt 目标目录
+    '''将src目录,完全相同地复制到另一个tgt目录（不存在则创造，存在则删了重复制）'''
 
-    if not (os.path.isdir(src) and os.path.isdir(tgt)):
-        # 如果传进来的不是目录
-        # print("传入目录不存在")
-        return
+    if not os.path.isdir(src) :
+        # 如果传进来的src不是目录
+        # https://stackoverflow.com/questions/26938799/printing-variables-in-python-3-4
+        print(f"传入{src}目录不存在")
 
-    for a in os.walk(src):
-        #递归创建目录
-        for d in a[1]:
-            dir_path = os.path.join(a[0].replace(src,tgt),d)
-            if not os.path.isdir(dir_path):
-                os.makedirs(dir_path)
-        #递归拷贝文件
-        for f in a[2]:
-            dep_path = os.path.join(a[0],f)
-            arr_path = os.path.join(a[0].replace(src,tgt),f)
-            shutil.copy(dep_path,arr_path)
+    os.makedirs(tgt, exist_ok=True)
+
+    # https://blog.csdn.net/zd147896325/article/details/79870131
+    shutil.rmtree(tgt)
+    shutil.copytree(src,tgt)
 
 def get_time_diff(tik, tok):
     h, remainder = divmod((tok - tik).seconds, 3600)
