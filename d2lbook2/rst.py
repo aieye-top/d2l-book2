@@ -138,7 +138,7 @@ def _process_rst(body):
             i = j
         elif line.startswith('.. parsed-literal::'):
             # if /img exists, copy it to _build/img
-            cwd = os.getcwd() # https://blog.csdn.net/qq_17731383/article/details/81430425?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.baidujs&dist_request_id=&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.baidujs
+            cwd = os.getcwd() # https://blog.csdn.net/qq_17731383/article/details/81430425
             copy_dir(cwd+'/img/', cwd+'/_build/img/')
             # add a output class so we can add customized css
             lines[i] += '\n    :class: output'
