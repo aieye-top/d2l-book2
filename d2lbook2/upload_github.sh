@@ -59,5 +59,7 @@ rm -rf ${REPO_DIR}
 
 git config --global push.default simple
 git add -f --all .
-git diff-index --quiet HEAD || git commit -am "Version $3"
+# https://stackoverflow.com/questions/8482843/git-commit-bash-script
+read -p "Commit description: " desc
+git diff-index --quiet HEAD || git commit -am "$desc"
 git push origin
