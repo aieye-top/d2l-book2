@@ -237,6 +237,9 @@ class Builder(object):
 
     @_once
     def rst(self):
+        # if /img exists, copy it to _build/img
+        cwd = os.getcwd() # https://blog.csdn.net/qq_17731383/article/details/81430425
+        copy_dir(cwd+'/img/', cwd+'/_build/img/')
         if self.config.tab == 'all':
             self.merge()
         else:

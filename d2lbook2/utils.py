@@ -135,6 +135,29 @@ def copy(src, tgt):
     mkdir(os.path.dirname(tgt))
     shutil.copy(src, tgt)
 
+# https://blog.csdn.net/qq_44107838/article/details/103139126
+def copy_dir(src,tgt):
+
+    '''将一个目录下的全部文件和目录,完整地<拷贝并覆盖>到另一个目录'''
+    # src 源目录
+    # tgt 目标目录
+
+    if not (os.path.isdir(src) and os.path.isdir(tgt)):
+        # 如果传进来的不是目录
+        # print("传入目录不存在")
+        return
+
+    for a in os.walk(src):
+        #递归创建目录
+        for d in a[1]:
+            dir_path = os.path.join(a[0].replace(src,tgt),d)
+            if not os.path.isdir(dir_path):
+                os.makedirs(dir_path)
+        #递归拷贝文件
+        for f in a[2]:
+            dep_path = os.path.join(a[0],f)
+            arr_path = os.path.join(a[0].replace(src,tgt),f)
+            shutil.copy(dep_path,arr_path)
 
 def get_time_diff(tik, tok):
     h, remainder = divmod((tok - tik).seconds, 3600)
