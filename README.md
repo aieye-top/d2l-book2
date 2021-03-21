@@ -185,13 +185,11 @@ docker run --rm --name d2cl-whole -ditv /d/onedrive/Documents/read/d2cl-whole:/d
 
 ## PROXY
 
-
 ```bash
-docker run --rm --name 2bPM -e HTTP_PROXY=127.0.0.1:1080 -ditv /d/onedrive/Documents/read/2bPM:/d2lbook2/2bPM registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:github  /bin/bash
+docker run --rm --name 2bPM -e HTTP_PROXY=127.0.0.1:1080 -ditv /d/onedrive/Documents/read/2bPM:/d2lbook2/2bPM registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:description  /bin/bash
 docker exec -it 2bPM /bin/bash
 ```
 
 ## Image
 
-需要手动复制到/_build/rst/下，以避免
-`WARNING: image file not readable`
+description版已经实现自动复制到rst
