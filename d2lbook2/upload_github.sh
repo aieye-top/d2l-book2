@@ -14,6 +14,8 @@ IN_DIR="$( cd $1 && pwd )"
 REPO=$2
 REPO_DIR=${IN_DIR}-git
 
+# https://stackoverflow.com/questions/4846007/check-if-directory-exists-and-delete-in-one-command-unix/4848605
+if [ -d "${REPO_DIR}" ]; then rm -Rf ${REPO_DIR}; fi
 mkdir ${REPO_DIR}
 
 # disabled git clone
