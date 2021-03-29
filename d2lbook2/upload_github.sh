@@ -5,7 +5,7 @@ set -e
 if [ $# -ne 3 ]; then
     echo "ERROR: needs two arguments. "
     echo "Sample usage:"
-    echo "   $0 notebooks d2l-ai/notebooks version"
+    echo "   $0 notebooks aieye-top/d2lbook2 version"
     exit -1
 fi
 
