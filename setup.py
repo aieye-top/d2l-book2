@@ -17,14 +17,17 @@ requirements = [
     'awscli',
     'gitpython',
     'sphinx_autodoc_typehints',
-
+    'astor',
+    'yapf',
+    'fasteners',
+    'isort'
 ]
 
 setup(
     name='d2lbook2',
     version=__version__,
     install_requires=requirements,
-    python_requires='>=3.5',
+    python_requires='>=3.8',
     author='StevenJokess, D2L Developers',
     author_email='llgg8679@qq.com',
     description="Create an online book in docswith Jupyter Notebooks and Sphinx",
