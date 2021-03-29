@@ -12,7 +12,6 @@ The differences are
 TODO: https://github.com/d2l-ai/d2l-book/commit/5f078f8812bb0f2bf45d9648fa80e1ba63f7b524
 https://github.com/d2l-ai/d2l-book/commit/5f078f8812bb0f2bf45d9648fa80e1ba63f7b524
 
-
 ## Install:
 
 ```bash
@@ -20,8 +19,6 @@ pip install -U git+https://github.com/aieye-top/d2l-book2#egg=d2lbook2
 ```
 
 https://book.d2l.ai/user/deploy.html
-
-
 
 ## To deploy to Github
 
@@ -57,7 +54,7 @@ docker pull stevenjokes/d2l-book2:latest
 docker pull registry.cn-shanghai.aliyuncs.com/csq-dl/d2l-book2:latest
 ```
 
-![pull]](img/docker_pull.png)
+![pull](img/docker_pull.png)
 
 ---
 
