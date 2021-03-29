@@ -1,34 +1,38 @@
-import os
-import sys
-import notedown
-import nbformat
-import logging
-import shutil
-import datetime
 import argparse
-import re
-import regex
-import subprocess
+import datetime
 import hashlib
+import logging
+import os
 import pathlib
-from d2lbook2.utils import *  # TODO(mli), don't report *
-from d2lbook2.sphinx import prepare_sphinx_env
-from d2lbook2.config import Config
-from d2lbook2 import colab, sagemaker
-from d2lbook2 import markdown
-from d2lbook2 import library
-from d2lbook2 import notebook
+import re
+import shutil
+import subprocess
+import sys
+
+import nbformat
+import notedown
+import regex
+
+from d2lbook2 import colab, library, markdown, notebook, sagemaker
 from d2lbook2 import rst as rst_lib
+# from d2lbook2 import resource
+
+from d2lbook2.config import Config
+# from d2lbook2.slides import Slides, remove_slide_marks
+from d2lbook2.sphinx import prepare_sphinx_env
+from d2lbook2.utils import *  # TODO(mli), don't report *
 
 __all__  = ['build']
 
-commands = ['eval', 'rst', 'html', 'pdf', 'pkg', 'linkcheck', 'ipynb',
-            'outputcheck', 'tabcheck', 'lib', 'colab', 'sagemaker', 'all', 'merge']
+commands = [
+    'eval', 'rst', 'html', 'pdf', 'pkg', 'linkcheck', 'ipynb', 'slides',
+    'outputcheck', 'tabcheck', 'lib', 'colab', 'sagemaker', 'all', 'merge']
 
 def build():
     parser = argparse.ArgumentParser(description='Build the documents')
     parser.add_argument('commands', nargs='+', choices=commands)
-    parser.add_argument('--tab', default=None, help='The tab to build, if multi-tab is enabled.')
+    parser.add_argument('--tab', default=None,
+                        help='The tab to build, if multi-tab is enabled.')
     args = parser.parse_args(sys.argv[2:])
     config = Config(tab=args.tab)
     builder = Builder(config)
@@ -47,8 +51,9 @@ def _once(func):
         tik = datetime.datetime.now()
         func(self)
         logging.info('=== Finished "%s" in %s', full_name,
-                        get_time_diff(tik, datetime.datetime.now()))
+                     get_time_diff(tik, datetime.datetime.now()))
         self.done[name] = True
+
     return warp
 
 class Builder(object):
@@ -65,8 +70,9 @@ class Builder(object):
     def _find_md_files(self):
         build = self.config.build
         src_dir = self.config.src_dir
-        notebooks = find_files(build['notebooks'], src_dir,
-                               build['exclusions']+' '+build['non-notebooks'])
+        notebooks = find_files(
+            build['notebooks'], src_dir,
+            build['exclusions'] + ' ' + build['non-notebooks'])
         pure_markdowns = find_files(build['non-notebooks'], src_dir,
                                     build['exclusions'])
         depends = find_files(build['dependencies'], src_dir)
@@ -76,10 +82,13 @@ class Builder(object):
         notebooks, pure_markdowns, depends = self._find_md_files()
         depends_mtimes = get_mtimes(depends)
         latest_depend = max(depends_mtimes) if len(depends_mtimes) else 0
-        updated_notebooks = get_updated_files(
-            notebooks, self.config.src_dir, self.config.eval_dir, 'md', 'ipynb', latest_depend)
-        updated_markdowns = get_updated_files(
-            pure_markdowns, self.config.src_dir, self.config.eval_dir, 'md', 'md', latest_depend)
+        updated_notebooks = get_updated_files(notebooks, self.config.src_dir,
+                                              self.config.eval_dir, 'md',
+                                              'ipynb', latest_depend)
+        updated_markdowns = get_updated_files(pure_markdowns,
+                                              self.config.src_dir,
+                                              self.config.eval_dir, 'md', 'md',
+                                              latest_depend)
         return updated_notebooks, updated_markdowns
 
     def tabcheck(self):
@@ -122,22 +131,31 @@ class Builder(object):
         notebooks, pure_markdowns, depends = self._find_md_files()
         depends_mtimes = get_mtimes(depends)
         latest_depend = max(depends_mtimes) if len(depends_mtimes) else 0
-        updated_notebooks = get_updated_files(
-            notebooks, self.config.src_dir, self.config.eval_dir, 'md', 'ipynb', latest_depend)
-        updated_markdowns = get_updated_files(
-            pure_markdowns, self.config.src_dir, self.config.eval_dir, 'md', 'md', latest_depend)
+        updated_notebooks = get_updated_files(notebooks, self.config.src_dir,
+                                              self.config.eval_dir, 'md',
+                                              'ipynb', latest_depend)
+        updated_markdowns = get_updated_files(pure_markdowns,
+                                              self.config.src_dir,
+                                              self.config.eval_dir, 'md', 'md',
+                                              latest_depend)
         num_updated_notebooks = len(updated_notebooks)
         num_updated_markdowns = len(updated_markdowns)
         logging.info('%d notebooks are outdated', num_updated_notebooks)
         for i, nb in enumerate(updated_notebooks):
             logging.info('[%d] %s', i + 1, nb[0])
         self._copy_resources(self.config.src_dir, self.config.eval_dir)
-
+        #  gpus = resource.get_available_gpus()
+        #  num_cpu_workers = len(gpus) if gpus else 2
+        #  logging.info(
+        #     f'Evaluating notebooks in parallel with {num_cpu_workers} CPU workers and {len(gpus)} GPU workers'
+        # )
+        # scheduler = resource.Scheduler(num_cpu_workers, len(gpus))
+        # run_cells = self.config.build['eval_notebook'].lower() == 'true'
         for i, (src, tgt) in enumerate(updated_notebooks):
-            tik = datetime.datetime.now()
-            logging.info('[%d/%d, %s] Evaluating %s, save as %s',
-                         i+1, num_updated_notebooks,
-                         get_time_diff(eval_tik, tik), src, tgt)
+            # -# tik = datetime.datetime.now()
+            # -# logging.info('[%d/%d, %s] Evaluating %s, save as %s',
+            # -#              i+1, num_updated_notebooks,
+            # -#              get_time_diff(eval_tik, tik), src, tgt)
             mkdir(os.path.dirname(tgt))
             run_cells = self.config.build['eval_notebook'].lower()=='true'
             _process_and_eval_notebook(src, tgt, run_cells, self.config)
@@ -399,34 +417,10 @@ def update_ipynb_toc(root):
         with open(fn, 'w') as f:
             f.write(nbformat.writes(nb))
 
-def get_toc(root):
-    """return a list of files in the order defined by TOC"""
-    subpages = get_subpages(root)
-    res = [root]
-    for fn in subpages:
-        res.extend(get_toc(fn))
-    return res
 
-def get_subpages(input_fn):
-    """read toc in input_fn, returns what it contains"""
-    subpages = []
-    reader = notedown.MarkdownReader()
-    with open(input_fn, 'r', encoding='UTF-8') as f:
-        nb = reader.read(f)
-    for cell in nb.cells:
-        if (cell.cell_type == 'code' and
-            'attributes' in cell.metadata and
-            'toc' in cell.metadata.attributes['classes']):
-            for l in cell.source.split('\n'):
-                l = l.strip()
-                if not l.startswith(':'):
-                    fn = os.path.join(os.path.dirname(input_fn), l + '.md')
-                    if os.path.exists(fn):
-                        subpages.append(fn)
-    return subpages
 
-def _process_and_eval_notebook(input_fn, output_fn, run_cells, config,
-                               timeout=20*60, lang='python'):
+def _process_and_eval_notebook(scheduler, input_fn, output_fn, run_cells,
+                               config, timeout=20 * 60, lang='python'):
     with open(input_fn, 'r') as f:
         md = f.read()
     nb = notebook.read_markdown(md)
@@ -443,10 +437,40 @@ def _process_and_eval_notebook(input_fn, output_fn, run_cells, config,
         # replace alias
         if tab in config.library:
             nb = library.replace_alias(nb, config.library[tab])
+    # nb = library.format_code_nb(nb)
 
+    if not run_cells:
+        logging.info(f'Converting {input_fn} to {output_fn}')
+        _job(nb, output_fn, run_cells, timeout, lang)
+    else:
+        # use at most 2 gpus to eval a notebook
+        num_gpus = resource.get_notebook_gpus(nb, 2)
+        scheduler.add(1, num_gpus, target=_job,
+                      args=(nb, output_fn, run_cells, timeout, lang),
+                      description=f'Evaluating {input_fn}')
+
+def ipynb2rst(input_fn, output_fn):
+    with open(input_fn, 'r') as f:
+        nb = nbformat.read(f, as_version=4)
+    # nb = remove_slide_marks(nb)
+    sig = hashlib.sha1(input_fn.encode()).hexdigest()[:6]
+    resources = {
+        'unique_key':
+        'output_' + rm_ext(os.path.basename(output_fn)) + '_' + sig}
+    body, resources = rst_lib.convert_notebook(nb, resources)
+    with open(output_fn, 'w') as f:
+        f.write(body)
+    outputs = resources['outputs']
+    base_dir = os.path.dirname(output_fn)
+    for fn in outputs:
+        full_fn = os.path.join(base_dir, fn)
+        with open(full_fn, 'wb') as f:
+            f.write(outputs[fn])
+
+def _job(nb, output_fn, run_cells, timeout, lang):
     # evaluate
     if run_cells:
-        # change to the notebook directory to resolve the relpaths properly
+        # change to the notebook directory to resolve the relpaths # properly
         cwd = os.getcwd()
         os.chdir(os.path.join(cwd, os.path.dirname(output_fn)))
         notedown.run(nb, timeout)
@@ -457,7 +481,7 @@ def _process_and_eval_notebook(input_fn, output_fn, run_cells, config,
             outputs = []
             for out in cell['outputs']:
                 if ('data' in out and 'text/plain' in out['data'] and
-                    out['data']['text/plain'].startswith('HBox')):
+                        out['data']['text/plain'].startswith('HBox')):
                     # that's tqdm progress bar cannot displayed properly.
                     continue
                 if 'name' in out and out['name'] == 'stderr':
@@ -465,26 +489,9 @@ def _process_and_eval_notebook(input_fn, output_fn, run_cells, config,
                 outputs.append(out)
             cell['outputs'] = outputs
     # write
-    nb['metadata'].update({'language_info':{'name':lang}})
+    nb['metadata'].update({'language_info': {'name': lang}})
     with open(output_fn, 'w') as f:
         f.write(nbformat.writes(nb))
-
-
-def ipynb2rst(input_fn, output_fn):
-    with open(input_fn, 'r') as f:
-        nb = nbformat.read(f, as_version=4)
-    sig = hashlib.sha1(input_fn.encode()).hexdigest()[:6]
-    resources = {'unique_key':
-                 'output_'+rm_ext(os.path.basename(output_fn))+'_'+sig}
-    body, resources = rst_lib.convert_notebook(nb, resources)
-    with open(output_fn, 'w') as f:
-        f.write(body)
-    outputs = resources['outputs']
-    base_dir = os.path.dirname(output_fn)
-    for fn in outputs:
-        full_fn = os.path.join(base_dir, fn)
-        with open(full_fn, 'wb') as f:
-            f.write(outputs[fn])
 
 def process_latex(fname, script):
     with open(fname, 'r') as f:
