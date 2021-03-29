@@ -401,7 +401,7 @@ div.mdl-tabs__tab-bar { justify-content: left; }
 }
 
 .mdl-tabs__tab.is-active {
-    background: rgb(0,0,0,.09);    
+    background: rgb(0,0,0,.09);
 }
 """
 
