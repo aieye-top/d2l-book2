@@ -3,7 +3,7 @@
 This package helps you build and publish **a book with Python code**, or
 **Python package documents with tutorials**.
 
-The difference is
+The differences are
 
 * the document is available at docs/
 * you can upload by any systems with docker.
