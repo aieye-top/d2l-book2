@@ -92,7 +92,7 @@ def _save_block(source: str, save_mark: str):
                         else:
                             break
                     break
-    return '\n'.join(block).strip()
+    return format_code('\n'.join(block))
 
 def _save_code(input_fn, output_fp, save_mark='@save', tab=None, default_tab=None):
     """get the code blocks (import, class, def) that will be saved"""
@@ -151,6 +151,31 @@ def save_alias(tab_lib):
             f.write('# Alias defined in config.ini\n')
             f.write(alias+'\n\n')
 
+def replace_fluent_alias(source, fluent_mapping):
+    fluent_mapping = {a: b for a, b in fluent_mapping}
+    new_src = source
+    for _ in range(100):  # 100 is a (random) big enough number
+        replaced = False
+        tree = ast.parse(new_src)
+        for node in ast.walk(tree):
+            if (isinstance(node, ast.Call) and
+                    isinstance(node.func, ast.Attribute) and
+                    isinstance(node.func.value, ast.Name) and
+                    node.func.value.id == 'd2l' and
+                    node.func.attr in fluent_mapping):
+                new_node = ast.Call(
+                    ast.Attribute(value=node.args[0],
+                                  attr=fluent_mapping[node.func.attr]),
+                    node.args[1:], node.keywords)
+                new_src = new_src.replace(
+                    ast.get_source_segment(new_src, node),
+                    astor.to_source(new_node).rstrip())
+                replaced = True
+                break
+        if not replaced:
+            break
+    return new_src
+
 def replace_alias(nb, tab_lib):
     nb = copy.deepcopy(nb)
     patterns = []
@@ -165,6 +190,49 @@ def replace_alias(nb, tab_lib):
             mapping = _parse_mapping_config(tab_lib['fluent_alias'])
             patterns += [(rf'd2l.{a}\(([\w\_\d]+)\,\ *', rf'\1.{b}(')
                          for a, b in mapping]
+
+    for cell in nb.cells:
+        if cell.cell_type == 'code':
+            for p, r in patterns:
+                cell.source = re.sub(p, r, cell.source)
+            if fluent_mapping:
+                for a, _ in fluent_mapping:
+                    if 'd2l.' + a in cell.source:
+                        cell.source = replace_fluent_alias(
+                            cell.source, fluent_mapping)
+                        break
+    return nb
+
+def format_code(source: str):
+    if 'import ' in source:
+        config = isort.settings.Config(no_lines_before=[
+            isort.settings.FUTURE, isort.settings.STDLIB, isort.settings.
+            THIRDPARTY, isort.settings.FIRSTPARTY, isort.settings.LOCALFOLDER])
+
+        source = isort.code(source, config=config)
+
+    # fix the bug that yapf cannot handle jupyter magic
+    for l in source.splitlines():
+        if l.startswith('%') or l.startswith('!'):
+            return source
+
+    # fix the bug that yapf remove the tailling ;
+    has_tailling_semicolon = source.rstrip().endswith(';')
+
+    style = {
+        'DISABLE_ENDING_COMMA_HEURISTIC': True,
+        'SPACE_BETWEEN_ENDING_COMMA_AND_CLOSING_BRACKET': False,
+        'SPLIT_BEFORE_CLOSING_BRACKET': False,
+        'SPLIT_BEFORE_DICT_SET_GENERATOR': False,
+        'SPLIT_BEFORE_LOGICAL_OPERATOR': False,
+        'SPLIT_BEFORE_NAMED_ASSIGNS': False,
+        'COLUMN_LIMIT': 78,
+        'BLANK_LINES_AROUND_TOP_LEVEL_DEFINITION': 1,}
+    source = FormatCode(source, style_config=style)[0].strip()
+    if has_tailling_semicolon: source += ';'
+    return source
+
+def format_code_nb(nb):
     for cell in nb.cells:
         if cell.cell_type == 'code':
             for p, r in patterns:
