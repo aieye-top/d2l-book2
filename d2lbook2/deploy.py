@@ -10,7 +10,7 @@ from d2lbook2 import sagemaker
 
 __all__  = ['deploy']
 
-commands = ['html', 'pdf', 'pkg', 'colab', 'sagemaker', 'all']
+commands = ['html', 'pdf', 'pkg', 'colab', 'sagemaker', 'all', 'slides']
 
 def deploy():
     parser = argparse.ArgumentParser(description='Deploy documents')
@@ -25,9 +25,7 @@ def deploy():
     elif config.deploy['github_repo']:
         deployer = GithubDeployer(config)
     else:
-        logging.fatal('No deployment URL. You need to specify either'
-                      'a Github repo or a S3 bucket')
-        exit(-1)
+        deployer = Deployer(config)
     for cmd in args.commands:
         getattr(deployer, cmd)()
 
@@ -61,6 +59,12 @@ class Deployer(object):
         tab = self.config.tab
         self.config.set_tab('all')
         self.config.iter_tab(_run)
+        self.config.set_tab(tab)
+
+    def slides(self):
+        tab = self.config.tab
+        self.config.set_tab('all')
+        self.config.iter_tab(lambda: slides.Slides(self.config).deploy())
         self.config.set_tab(tab)
 
 class GithubDeployer(Deployer):
