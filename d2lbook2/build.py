@@ -15,10 +15,10 @@ import regex
 
 from d2lbook2 import colab, library, markdown, notebook, sagemaker
 from d2lbook2 import rst as rst_lib
-# from d2lbook2 import resource
+from d2lbook2 import resource
 
 from d2lbook2.config import Config
-# from d2lbook2.slides import Slides, remove_slide_marks
+from d2lbook2.slides import Slides, remove_slide_marks
 from d2lbook2.sphinx import prepare_sphinx_env
 from d2lbook2.utils import *  # TODO(mli), don't report *
 
