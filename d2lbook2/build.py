@@ -144,18 +144,14 @@ class Builder(object):
         for i, nb in enumerate(updated_notebooks):
             logging.info('[%d] %s', i + 1, nb[0])
         self._copy_resources(self.config.src_dir, self.config.eval_dir)
-        #  gpus = resource.get_available_gpus()
-        #  num_cpu_workers = len(gpus) if gpus else 2
-        #  logging.info(
-        #     f'Evaluating notebooks in parallel with {num_cpu_workers} CPU workers and {len(gpus)} GPU workers'
-        # )
-        # scheduler = resource.Scheduler(num_cpu_workers, len(gpus))
-        # run_cells = self.config.build['eval_notebook'].lower() == 'true'
+        gpus = resource.get_available_gpus()
+        num_cpu_workers = len(gpus) if gpus else 2
+        logging.info(
+           f'Evaluating notebooks in parallel with {num_cpu_workers} CPU workers and {len(gpus)} GPU workers'
+        )
+        scheduler = resource.Scheduler(num_cpu_workers, len(gpus))
+        run_cells = self.config.build['eval_notebook'].lower() == 'true'
         for i, (src, tgt) in enumerate(updated_notebooks):
-            # -# tik = datetime.datetime.now()
-            # -# logging.info('[%d/%d, %s] Evaluating %s, save as %s',
-            # -#              i+1, num_updated_notebooks,
-            # -#              get_time_diff(eval_tik, tik), src, tgt)
             mkdir(os.path.dirname(tgt))
             run_cells = self.config.build['eval_notebook'].lower()=='true'
             _process_and_eval_notebook(src, tgt, run_cells, self.config)
