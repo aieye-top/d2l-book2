@@ -153,10 +153,10 @@ class Builder(object):
         run_cells = self.config.build['eval_notebook'].lower() == 'true'
         for i, (src, tgt) in enumerate(updated_notebooks):
             mkdir(os.path.dirname(tgt))
-            run_cells = self.config.build['eval_notebook'].lower()=='true'
-            _process_and_eval_notebook(src, tgt, run_cells, self.config)
-            tok = datetime.datetime.now()
-            logging.info('Finished in %s', get_time_diff(tik, tok))
+            _process_and_eval_notebook(scheduler, src, tgt, run_cells,
+                                       self.config)
+        scheduler.run()
+        assert not scheduler.failed_tasks, scheduler.error_message
 
         for src, tgt in updated_markdowns:
             logging.info('Copying %s to %s', src, tgt)
@@ -166,22 +166,25 @@ class Builder(object):
 
     # Remove target files (e.g., eval and rst) based on removed files under src
     def _rm_tgt_files(self, src_ext, tgt_ext, tgt_dir, must_incls=None):
-        notebooks_to_rm = get_files_to_rm(
-                self.config.build['notebooks'], self.config.src_dir, tgt_dir,
-                src_ext, tgt_ext)
+        notebooks_to_rm = get_files_to_rm(self.config.build['notebooks'],
+                                          self.config.src_dir, tgt_dir,
+                                          src_ext, tgt_ext)
 
-        non_notebooks_pattern = (self.config.build['non-notebooks'] + ' '
-                + self.config.build['resources'])
+        non_notebooks_pattern = (self.config.build['non-notebooks'] + ' ' +
+                                 self.config.build['resources'])
         non_notebooks_to_rm = get_files_to_rm(non_notebooks_pattern,
                 self.config.src_dir, tgt_dir)
 
         if must_incls:
             must_incls = set(must_incls)
-        tgt_files_to_rm = [f for f in notebooks_to_rm + non_notebooks_to_rm
-                           if not must_incls or f not in must_incls]
+        tgt_files_to_rm = [
+            f for f in notebooks_to_rm + non_notebooks_to_rm
+            if not must_incls or f not in must_incls]
         if tgt_files_to_rm:
-            tgt_files_to_rm_concise = hide_individual_data_files(tgt_files_to_rm)
-            logging.info('Cleaning target files whose corresponding source '
+            tgt_files_to_rm_concise = hide_individual_data_files(
+                tgt_files_to_rm)
+            logging.info(
+                'Cleaning target files whose corresponding source '
                 'files are removed (individual data files are hidden, '
                 'e.g., _build/eval/data/VOC/A/B/C -> _build/eval/data/VOC')
             for fn in tgt_files_to_rm_concise:
@@ -190,7 +193,8 @@ class Builder(object):
                 os.remove(fn)
             rmed_empty_dirs = []  # To display more concisely
             rm_empty_dir(tgt_dir, rmed_empty_dirs)
-            rmed_empty_dirs_concise = hide_individual_data_files(rmed_empty_dirs)
+            rmed_empty_dirs_concise = hide_individual_data_files(
+                rmed_empty_dirs)
             for fn in rmed_empty_dirs_concise:
                 logging.info('Cleaned empty directories: %s' % fn)
 
@@ -210,10 +214,11 @@ class Builder(object):
 
     def _copy_rst(self):
         rst_files = find_files(self.config.build['rsts'], self.config.src_dir)
-        updated_rst = get_updated_files(rst_files, self.config.src_dir, self.config.rst_dir)
+        updated_rst = get_updated_files(rst_files, self.config.src_dir,
+                                        self.config.rst_dir)
         if len(updated_rst):
-            logging.info('Copy %d updated RST files to %s',
-                         len(updated_rst), self.config.rst_dir)
+            logging.info('Copy %d updated RST files to %s', len(updated_rst),
+                         self.config.rst_dir)
         for src, tgt in updated_rst:
             copy(src, tgt)
         return rst_files
@@ -226,18 +231,21 @@ class Builder(object):
         default_eval_dir = self.config.eval_dir[:-4]
         notebooks = find_files(os.path.join(default_eval_dir, '**', '*.ipynb'))
         # TODO(mli) if no default tab, then will not trigger merge
-        updated_notebooks = get_updated_files(
-            notebooks, default_eval_dir, self.config.eval_dir, 'ipynb', 'ipynb')
-        tab_dirs = [default_eval_dir+'_'+tab for tab in self.config.tabs[1:]]
+        updated_notebooks = get_updated_files(notebooks, default_eval_dir,
+                                              self.config.eval_dir, 'ipynb',
+                                              'ipynb')
+        tab_dirs = [
+            default_eval_dir + '_' + tab for tab in self.config.tabs[1:]]
         for default, merged in updated_notebooks:
             src_notebooks = [default]
             for tab_dir in tab_dirs:
-                fname = os.path.join(tab_dir,
-                    os.path.relpath(default, default_eval_dir))
+                fname = os.path.join(
+                    tab_dir, os.path.relpath(default, default_eval_dir))
                 if os.path.exists(fname) and os.stat(fname).st_size > 0:
                     src_notebooks.append(fname)
             logging.info(f'merge {src_notebooks} into {merged}')
-            src_nbs = [nbformat.read(open(fn, 'r'), as_version=4)
+            src_nbs = [
+                nbformat.read(open(fn, 'r'), as_version=4)
                        for fn in src_notebooks]
             if len(src_nbs) > 1:
                 dst_nb = notebook.merge_tab_notebooks(src_nbs)
@@ -250,6 +258,22 @@ class Builder(object):
         self._copy_resources(default_eval_dir, self.config.eval_dir)
 
     @_once
+    def slides(self):
+        self.eval()
+        notebooks = find_files(
+            os.path.join(self.config.eval_dir, '**', '*.ipynb'))
+        updated_notebooks = get_updated_files(notebooks, self.config.eval_dir,
+                                              self.config.slides_dir, 'ipynb',
+                                              'ipynb')
+        sd = Slides(self.config)
+        for src, tgt in updated_notebooks:
+            nb = notebook.read(src)
+            if not nb:
+                continue
+            sd.generate(nb, tgt)
+        sd.generate_readme()
+
+    @_once
     def rst(self):
         # if cwd+'/img/' and cwd+'/_build/rst/img/' exist, copy it to cwd+'/_build/rst/img/'
         cwd = os.getcwd() # https://blog.csdn.net/qq_17731383/article/details/81430425
@@ -258,9 +282,11 @@ class Builder(object):
             self.merge()
         else:
             self.eval()
-        notebooks = find_files(os.path.join(self.config.eval_dir, '**', '*.ipynb'))
-        updated_notebooks = get_updated_files(
-            notebooks, self.config.eval_dir, self.config.rst_dir, 'ipynb', 'rst')
+        notebooks = find_files(
+            os.path.join(self.config.eval_dir, '**', '*.ipynb'))
+        updated_notebooks = get_updated_files(notebooks, self.config.eval_dir,
+                                              self.config.rst_dir, 'ipynb',
+                                              'rst')
         logging.info('%d rst files are outdated', len(updated_notebooks))
         for src, tgt in updated_notebooks:
             logging.info('Convert %s to %s', src, tgt)
@@ -281,22 +307,24 @@ class Builder(object):
         self.rst()
         self.colab()
         self.sagemaker()
-        run_cmd(['sphinx-build', self.config.rst_dir, self.config.html_dir,
+        run_cmd([
+            'sphinx-build', self.config.rst_dir, self.config.html_dir,
                  '-b html -c', self.config.rst_dir, self.sphinx_opts])
         self._colab.add_button(self.config.html_dir)
 
     def _default_tab_dir(self, dirname):
         tokens = dirname.split('/')
         if self.config.tabs and '_' in tokens[-1]:
-            tokens[-1] =  '_'.join(tokens[-1].split('_')[:-1])
+            tokens[-1] = '_'.join(tokens[-1].split('_')[:-1])
             return '/'.join(tokens)
         return dirname
 
     @_once
     def ipynb(self):
         self.eval()
-        run_cmd(['rm -rf', self.config.ipynb_dir, '; cp -r ',
-                 self.config.eval_dir, self.config.ipynb_dir])
+        run_cmd([
+            'rm -rf', self.config.ipynb_dir, '; cp -r ', self.config.eval_dir,
+            self.config.ipynb_dir])
         update_ipynb_toc(self.config.ipynb_dir)
 
     @_once
@@ -304,7 +332,8 @@ class Builder(object):
         def _run():
             self.ipynb()
             self._colab.generate_notebooks(self.config.ipynb_dir,
-                                           self.config.colab_dir, self.config.tab)
+                                           self.config.colab_dir,
+                                           self.config.tab)
         self.config.iter_tab(_run)
 
     @_once
@@ -312,20 +341,23 @@ class Builder(object):
         def _run():
             self.ipynb()
             self._sagemaker.generate_notebooks(self.config.ipynb_dir,
-                                               self.config.sagemaker_dir, self.config.tab)
+                                               self.config.sagemaker_dir,
+                                               self.config.tab)
         self.config.iter_tab(_run)
 
     @_once
     def linkcheck(self):
         self.rst()
-        run_cmd(['sphinx-build', self.config.rst_dir, self.config.linkcheck_dir,
-                 '-b linkcheck -c', self.config.rst_dir, self.sphinx_opts])
+        run_cmd([
+            'sphinx-build', self.config.rst_dir, self.config.linkcheck_dir,
+            '-b linkcheck -c', self.config.rst_dir, self.sphinx_opts])
 
     @_once
     def pdf(self):
         self.rst()
-        run_cmd(['sphinx-build ', self.config.rst_dir, self.config.pdf_dir,
-                 '-b latex -c', self.config.rst_dir, self.sphinx_opts])
+        run_cmd([
+            'sphinx-build ', self.config.rst_dir, self.config.pdf_dir,
+            '-b latex -c', self.config.rst_dir, self.sphinx_opts])
 
         script = self.config.pdf['post_latex']
         process_latex(self.config.tex_fname, script)
@@ -336,8 +368,7 @@ class Builder(object):
         zip_fname = 'out.zip'
         if not self.config.tabs:
             self.ipynb()
-            run_cmd(['cd', self.config.ipynb_dir, '&& zip -r',
-                     zip_fname, '*'])
+            run_cmd(['cd', self.config.ipynb_dir, '&& zip -r', zip_fname, '*'])
             shutil.move(os.path.join(self.config.ipynb_dir, zip_fname),
                         self.config.pkg_fname)
         else:
@@ -347,14 +378,15 @@ class Builder(object):
                 self.ipynb()
                 run_cmd(['rm -rf', tab])
                 run_cmd(['cp -r', self.config.ipynb_dir, tab])
-            run_cmd(['zip -r', zip_fname]+self.config.tabs)
+            run_cmd(['zip -r', zip_fname] + self.config.tabs)
             shutil.move(zip_fname, self.config.pkg_fname)
             self.config.set_tab(origin_tab)
 
     @_once
     def lib(self):
-        root = os.path.join(self.config.src_dir, self.config.build['index'] + '.md')
-        notebooks = get_toc(root)
+        root = os.path.join(self.config.src_dir,
+                            self.config.build['index'] + '.md')
+        notebooks = notebook.get_toc(root)
         notebooks_enabled, _, _ = self._find_md_files()
         notebooks = [nb for nb in notebooks if nb in notebooks_enabled]
         root_dir = self.config.library['root_dir']
@@ -367,13 +399,14 @@ class Builder(object):
         if save_patterns:
             items = split_config_str(save_patterns, num_items_per_line=2)
             for lib_fname, tab in items:
-               library.save_tab(notebooks, lib_fname, tab, self.config.default_tab)
+                library.save_tab(notebooks, lib_fname, tab,
+                                 self.config.default_tab)
 
         for tab in self.config.tabs:
             if tab in self.config.library:
                 tab_lib = self.config.library[tab]
-                library.save_tab(notebooks, tab_lib['lib_file'],
-                                 tab, self.config.default_tab)
+                library.save_tab(notebooks, tab_lib['lib_file'], tab,
+                                 self.config.default_tab)
                 library.save_alias(tab_lib)
 
         save_mark = self.config.library['save_mark']
@@ -406,14 +439,12 @@ def update_ipynb_toc(root):
                         toc = []
                         for l in c['source'].split('\n'):
                             if l and not l.startswith(':'):
-                                toc.append(' - [%s](%s.ipynb)'%(l,l))
+                                toc.append(' - [%s](%s.ipynb)' % (l, l))
                         c['source'] = '\n'.join(toc)
                         c['type'] = 'markdown'
                 cell.source = markdown.join_markdown_cells(md_cells)
         with open(fn, 'w') as f:
             f.write(nbformat.writes(nb))
-
-
 
 def _process_and_eval_notebook(scheduler, input_fn, output_fn, run_cells,
                                config, timeout=20 * 60, lang='python'):
@@ -433,7 +464,7 @@ def _process_and_eval_notebook(scheduler, input_fn, output_fn, run_cells,
         # replace alias
         if tab in config.library:
             nb = library.replace_alias(nb, config.library[tab])
-    # nb = library.format_code_nb(nb)
+    nb = library.format_code_nb(nb)
 
     if not run_cells:
         logging.info(f'Converting {input_fn} to {output_fn}')
@@ -448,7 +479,7 @@ def _process_and_eval_notebook(scheduler, input_fn, output_fn, run_cells,
 def ipynb2rst(input_fn, output_fn):
     with open(input_fn, 'r') as f:
         nb = nbformat.read(f, as_version=4)
-    # nb = remove_slide_marks(nb)
+    nb = remove_slide_marks(nb)
     sig = hashlib.sha1(input_fn.encode()).hexdigest()[:6]
     resources = {
         'unique_key':
@@ -541,11 +572,11 @@ def _center_graphics(lines):
         if tabulary_cnt == 0 and figure_cnt == 0 and in_doc:
             sigs_greedy = re.findall('\\\\sphinxincludegraphics\\{.*\\}', l)
             if len(sigs_greedy) > 0:
-                longest_balanced_braces = regex.findall('\{(?>[^{}]|(?R))*\}',
-                                                        sigs_greedy[0])
-                sig_with_balanced_braces = ('\\sphinxincludegraphics'
-                                            + longest_balanced_braces[0])
-                lines[i] = l.replace(sig_with_balanced_braces,
-                                     ('\\begin{center}'
-                                      + sig_with_balanced_braces
-                                      + '\\end{center}'))
+                longest_balanced_braces = regex.findall(
+                    '\{(?>[^{}]|(?R))*\}', sigs_greedy[0])
+                sig_with_balanced_braces = ('\\sphinxincludegraphics' +
+                                            longest_balanced_braces[0])
+                lines[i] = l.replace(
+                    sig_with_balanced_braces,
+                    ('\\begin{center}' + sig_with_balanced_braces +
+                     '\\end{center}'))
