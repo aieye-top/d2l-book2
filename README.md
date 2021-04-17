@@ -146,10 +146,12 @@ d2lbook2 deploy html
 
 要登录用户名密钥，缓存
 
-```
+```bash
 git config --global user.email "you@example.com"
 git config --global user.name "Your Name"
 ```
+
+(not working...now!)
 
 ```bash
 git config --global credential.helper cache
