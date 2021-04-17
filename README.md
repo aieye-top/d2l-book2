@@ -8,6 +8,7 @@ The differences are
 * the document is available at docs/
 * you can upload by any systems with docker.
 * the docker is automatedly upload by gitflows.(now # push)
+* `d2lbook2 deploy html`can commit by your comment.
 
 TODO: Understand
 
