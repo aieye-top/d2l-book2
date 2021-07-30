@@ -15,7 +15,7 @@ TODO: Understand
 ## Install:
 
 ```bash
-pip install -U git+https://github.com/aieye-top/d2l-book2#egg=d2lbook2
+pip install -U git+https://github.com/aieye-top/d2l-book2.git@master#egg=d2lbook2
 ```
 
 https://book.d2l.ai/user/deploy.html
